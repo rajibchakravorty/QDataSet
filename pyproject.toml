@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "qdataset"
+version = "0.1.0"
+description = "Dataset for applying ML on quantum systems."
+authors = ["Rajib Chakravorty <4748396+rajibchakravorty@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+qutip = "^4.6.2"
+tensorflow = "^2.6.0"
+pylint = "^2.10.1"
+pytest = "^6.2.4"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
