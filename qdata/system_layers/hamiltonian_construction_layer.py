@@ -18,7 +18,6 @@ from tensorflow import (
     )
 from tensorflow.keras import layers
 
-
 class HamiltonianConstruction(layers.Layer):
     """Class constructor
 

@@ -2,56 +2,86 @@
     class for simulating the response of an LTI system
 """
 
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras import layers
 from scipy.linalg import dft
 from scipy.signal import cheby1
 
+from numpy import (
+    array,
+    concatenate,
+    diag,
+    int32,
+    pi,
+    reshape
+
+)
+from numpy.fft import fftfreq
+
+from tensorflow import (
+    cast,
+    complex64,
+    concat,
+    constant,
+    math,
+    matmul,
+    shape,
+    tile,
+    transpose,
+)
+from tensorflow.keras import layers
+
 
 class LTILayer(layers.Layer):
+    """class constructor
 
-    def __init__(self, T, M, **kwargs):
-        """
-        class constructor
+    total_duration  : Total duration of the input signal
+    num_time_steps  : Number of time steps
+    """
 
-        T  : Total duration of the input signal
-        M  : Number of time steps
-        """
-        super(LTILayer, self).__init__(**kwargs)
+    def __init__(self, total_duration, num_time_steps, **kwargs):
+
+        super().__init__(**kwargs)
 
         # define filter coefficients
-        num, den = cheby1(4, 0.1, 2 * np.pi * 20, analog=True)
+        num, den = cheby1(4, 0.1, 2 * pi * 20, analog=True)
 
         # define frequency vector
-        f = np.reshape(np.fft.fftfreq(M) * M / T, (1, M))
+        frequency_vector = reshape(
+            fftfreq(num_time_steps) * num_time_steps / total_duration, (1, num_time_steps))
 
         # evaluate the dft matrix
-        F = dft(M, 'sqrtn')
+        dft_matrix = dft(num_time_steps, 'sqrtn')
 
         # evaluate the numerator and denominator at each frequency
-        H_num = np.concatenate([(1j * 2 * np.pi * f) ** s for s in range(len(num) - 1, -1, -1)], axis=0)
-        H_den = np.concatenate([(1j * 2 * np.pi * f) ** s for s in range(len(den) - 1, -1, -1)], axis=0)
+        response_num = concatenate(
+            [(1j * 2 * pi * frequency_vector) ** s for s in range(len(num) - 1, -1, -1)], axis=0)
+        response_den = concatenate(
+            [(1j * 2 * pi * frequency_vector) ** s for s in range(len(den) - 1, -1, -1)], axis=0)
 
         # evaluate the frequency response
-        H = np.diag((num @ H_num) / (den @ H_den))
+        response = diag((num @ response_num) / (den @ response_den))
 
         # evaluate the full transformation and convert to a tensor of correct shape
-        self.L = tf.constant(np.reshape(F.conj().T @ H @ F, (1, 1, M, M)), dtype=tf.complex64)
+        self.transformation = constant(
+            reshape(
+                dft_matrix.conj().total_duration @ response @ dft_matrix,
+                (1, 1, num_time_steps, num_time_steps)), dtype=complex64)
 
-    def call(self, inputs):
+    def call(self, inputs):     # pylint: disable=arguments-differ
         """
-        Method to evaluate the ouput of the layer which represents the response of the system to the input
+        Method to evaluate the output of the layer which represents
+        the response of the system to the input
         """
 
         # convert variables to complex
-        x = tf.cast(tf.transpose(inputs, perm=[0, 2, 1, 3]), tf.complex64)
+        input_cmplx = cast(transpose(inputs, perm=[0, 2, 1, 3]), complex64)
 
         # repeat the transformation matrix
-        temp_shape = tf.concat([tf.shape(inputs)[0:1], tf.constant(np.array([1, 1, 1], dtype=np.int32))], 0)
-        L = tf.tile(self.L, temp_shape)
+        temp_shape = concat(
+            [shape(inputs)[0:1], constant(array([1, 1, 1], dtype=int32))], 0)
+        transformation = tile(self.transformation, temp_shape)
 
         # apply the transformation
-        y = tf.transpose(tf.math.real(tf.matmul(L, x)), perm=[0, 2, 1, 3])
+        output = transpose(
+            math.real(matmul(transformation, input_cmplx)), perm=[0, 2, 1, 3])
 
-        return y
+        return output
