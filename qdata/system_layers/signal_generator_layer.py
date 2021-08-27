@@ -1,32 +1,42 @@
-"""
-This class defines a custom tensorflow layer that generates a sequence of control pulse parameters
+"""Generator of Control pulse parameter
 """
 
-import numpy as np
-import tensorflow as tf
+from numpy import (
+    ones,
+    reshape,
+    triu_indices
+)
+from tensorflow import (
+    constant,
+    float32,
+    Tensor
+)
 from tensorflow.keras import layers
 
 
 class SignalGenerator(layers.Layer):
+    """Generates a sequence a sequence of control pulse parameters
 
-    def __init__(self, T, M, n_max, waveform="Gaussian", **kwargs):
-        """
-        class constructor
-
-        T             : Total time of evolution
-        M             : Number of discrete time steps
-        n_max         : Maximum number of control pulses in the sequence
-        waveform      : Waveform shape can either be "Gaussian", "Square", or "Zero"
-        """
-        # we must call thus function for any tensorflow custom layer
-        super(SigGen, self).__init__(**kwargs)
+    :param total_time: Total time of evolution
+    :param num_time_steps: Number of discrete time steps
+    :param max_control_pulse: Maximum number of control pulses in the sequence
+    :param waveform: Waveform shape can either be "Gaussian", "Square", or "Zero".
+    defaults to Gaussian
+    """
+    def __init__(self,
+                 total_time,
+                 num_time_steps,
+                 max_control_pulse,
+                 waveform="Gaussian", **kwargs):
 
         # store the parameters
-        self.n_max = n_max
-        self.T = T
-        self.M = M
-        self.time_range = tf.constant(np.reshape([(0.5 * T / M) + (j * T / M) for j in range(M)], (1, M, 1, 1)),
-                                      dtype=tf.float32)
+        self.n_max = max_control_pulse
+        self.T = total_time
+        self.M = num_time_steps
+        self.time_range = constant(
+            reshape([(0.5 * total_time / num_time_steps) +
+                     (j * total_time / num_time_steps) for j in range(num_time_steps)],
+                    (1, num_time_steps, 1, 1)), dtype=float32)
 
         if waveform == "Gaussian":
             self.call = self.call_Gaussian
@@ -38,17 +48,22 @@ class SignalGenerator(layers.Layer):
         # define the constant parmaters to shift the pulses correctly
         self.pulse_width = (0.5 * self.T / self.n_max)
 
-        self.a_matrix = np.ones((self.n_max, self.n_max))
-        self.a_matrix[np.triu_indices(self.n_max, 1)] = 0
-        self.a_matrix = tf.constant(np.reshape(self.a_matrix, (1, self.n_max, self.n_max)), dtype=tf.float32)
+        self.a_matrix = ones((self.n_max, self.n_max))
+        self.a_matrix[triu_indices(self.n_max, 1)] = 0
+        self.a_matrix = constant(
+            reshape(self.a_matrix, (1, self.n_max, self.n_max)), dtype=float32)
 
-        self.b_matrix = np.reshape([idx + 0.5 for idx in range(self.n_max)], (1, self.n_max, 1)) * self.pulse_width
-        self.b_matrix = tf.constant(self.b_matrix, dtype=tf.float32)
+        self.b_matrix = reshape(
+            [idx + 0.5 for idx in range(self.n_max)],
+            (1, self.n_max, 1)) * self.pulse_width
+        self.b_matrix = constant(self.b_matrix, dtype=float32)
 
-    def call_Square(self, inputs, training=False):
+        # we must call thus function for any tensorflow custom layer
+        super().__init__(**kwargs)
+
+    def call_Square(self, inputs: Tensor):
         """
         Method to generate square pulses
-
         """
         # generate randomly the signal parameters
         temp_shape = tf.concat([tf.shape(inputs)[0:1], tf.constant(np.array([1, 1], dtype=np.int32))], 0)

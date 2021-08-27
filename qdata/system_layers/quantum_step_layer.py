@@ -1,45 +1,48 @@
-"""
-This class defines a custom tensorflow layer that takes Hamiltonian as input, and produces one step forward propagator
+"""One step in Quantum processing
 """
 
-import tensorflow as tf
+from tensorflow import (
+    complex64,
+    constant,
+    linalg,
+    matmul,
+    Tensor
+)
 from tensorflow.keras import layers
 
 
 class QuantumCell(layers.Layer):
+    """Define one quantum cell.
+    :param time_step: time step for each propagator
+    """
+    def __init__(self, time_step: float, **kwargs):
 
-    def __init__(self, delta_T, **kwargs):
-        """
-        Class constructor.
-        delta_T: time step for each propagator
-        """
-
-        # here we define the time-step including the imaginary unit, so we can later use it directly with the expm function
-        self.delta_T = tf.constant(delta_T * -1j, dtype=tf.complex64)
+        # here we define the time-step including the imaginary unit,
+        # so we can later use it directly with the expm function
+        self.time_step = constant(time_step * -1j, dtype=complex64)
 
         # we must define this parameter for RNN cells
         self.state_size = [1]
 
         # we must call thus function for any tensorflow custom layer
-        super(QuantumCell, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
-    def call(self, inputs, states):
-        """
-        This method must be defined for any custom layer, it is where the calculations are done.
+    def call(self, inputs: Tensor, states: Tensor):     # pylint: disable=arguments-differ
+        """Custom call for the layer
 
-        inputs: The tensor representing the input to the layer. This is passed automatically by tensorflow.
-        states: The tensor representing the state of the cell. This is passed automatically by tensorflow.
+        :param inputs: The tensor representing the input to the layer.
+        :param states: The tensor representing the state of the cell.
         """
 
         previous_output = states[0]
 
         # evaluate -i*H*delta_T
-        Hamiltonian = inputs * self.delta_T
+        hamiltonian = inputs * self.time_step
 
-        # evaluate U = expm(-i*H*delta_T)
-        U = tf.linalg.expm(Hamiltonian)
+        # evaluate U = expm(-i*hamiltomian*time_step)
+        unitary = linalg.expm(hamiltonian)
 
-        # accuamalte U to to the rest of the propagators
-        new_output = tf.matmul(U, previous_output)
+        # accumulate unitaries to the rest of the propagators
+        new_output = matmul(unitary, previous_output)
 
         return new_output, [new_output]

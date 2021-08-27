@@ -2,7 +2,7 @@
 class for generating time-domain realizations of noise
 """
 
-from tensorflow.keras import layers
+from tensorflow.keras import layers, Tensor
 
 from ..noise_profiles import create_noise_profile
 
@@ -30,7 +30,7 @@ class NoiseLayer(layers.Layer):
             num_realization
         )
 
-    def call(self, inputs):  # pylint: disable=arguments-differ
+    def call(self, inputs: Tensor):  # pylint: disable=arguments-differ
         """Realize the noise
         """
 

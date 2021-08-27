@@ -14,9 +14,11 @@ from tensorflow import (
     expand_dims,
     multiply,
     shape,
-    tile
+    tile,
+    Tensor
     )
 from tensorflow.keras import layers
+
 
 class HamiltonianConstruction(layers.Layer):
     """Class constructor
@@ -33,7 +35,7 @@ class HamiltonianConstruction(layers.Layer):
         # this has to be called for any tensorflow custom layer
         super().__init__(**kwargs)
 
-    def call(self, inputs):     # pylint: disable=arguments-differ
+    def call(self, inputs: Tensor):     # pylint: disable=arguments-differ
         """
         This method must be defined for any custom layer, it is where the calculations are done.
 

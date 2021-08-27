@@ -26,6 +26,7 @@ from tensorflow import (
     shape,
     tile,
     transpose,
+    Tensor
 )
 from tensorflow.keras import layers
 
@@ -66,7 +67,7 @@ class LTILayer(layers.Layer):
                 dft_matrix.conj().total_duration @ response @ dft_matrix,
                 (1, 1, num_time_steps, num_time_steps)), dtype=complex64)
 
-    def call(self, inputs):     # pylint: disable=arguments-differ
+    def call(self, inputs: Tensor):     # pylint: disable=arguments-differ
         """
         Method to evaluate the output of the layer which represents
         the response of the system to the input
