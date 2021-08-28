@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "qdataset"
+name = "qmldataset"
 version = "0.1.0"
 description = "Dataset for applying ML on quantum systems."
 authors = ["Rajib Chakravorty <4748396+rajibchakravorty@users.noreply.github.com>"]
