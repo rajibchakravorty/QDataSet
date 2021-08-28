@@ -14,26 +14,29 @@ from tensorflow import (
     zeros
 )
 
+from .base_noise_profile import BaseNoiseProfile
 
-class TypeZeroNoiseProfile():
-    """Noise Layer definition
 
-        total_duration      : Total duration of the input signal
-        num_time_steps      : Number of time steps
-        num_realization      : Number of realizations
-        profile: Type of noise
+class TypeZeroNoiseProfile(BaseNoiseProfile):
+    """Type Zero Noise definition
+
+    :param total_duration      : Total duration of the input signal
+    :param num_time_steps      : Number of time steps
+    :param num_realization      : Number of realizations
 
    """
 
     def __init__(
-            self, total_duration, num_time_steps, num_realization, **kwargs):
+            self,
+            total_duration: float,
+            num_time_steps: int,
+            num_realization: int):
 
-        # store class parameters
-        self.total_duration = total_duration
-        self.num_time_steps = num_time_steps
-        self.num_realization = num_realization
-
-        super().__init__(**kwargs)
+        super().__init__(
+            total_duration=total_duration,
+            num_time_steps=num_time_steps,
+            num_realization=num_realization
+        )
 
     def call(self, inputs):  # No noise
         """

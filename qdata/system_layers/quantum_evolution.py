@@ -25,10 +25,7 @@ class QuantumEvolution(layers.RNN):
         super().__init__(cell, **kwargs)
 
     def call(self, inputs: Tensor):     # pylint: disable=arguments-differ
-        """This method must be defined for any custom layer,
-        it is where the calculations are done.
-
-        :param inputs: The tensor representing the input to the layer.
+        """Custom call method of the layer
         """
 
         # define identity matrix with correct dimensions to be used as initial propagtor

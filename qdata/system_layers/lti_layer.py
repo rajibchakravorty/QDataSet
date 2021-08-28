@@ -38,7 +38,7 @@ class LTILayer(layers.Layer):
     num_time_steps  : Number of time steps
     """
 
-    def __init__(self, total_duration, num_time_steps, **kwargs):
+    def __init__(self, total_duration: float, num_time_steps: int, **kwargs):
 
         super().__init__(**kwargs)
 
@@ -68,9 +68,7 @@ class LTILayer(layers.Layer):
                 (1, 1, num_time_steps, num_time_steps)), dtype=complex64)
 
     def call(self, inputs: Tensor):     # pylint: disable=arguments-differ
-        """
-        Method to evaluate the output of the layer which represents
-        the response of the system to the input
+        """Custom call method of the layer
         """
 
         # convert variables to complex

@@ -28,10 +28,7 @@ class QuantumCell(layers.Layer):
         super().__init__(**kwargs)
 
     def call(self, inputs: Tensor, states: Tensor):     # pylint: disable=arguments-differ
-        """Custom call for the layer
-
-        :param inputs: The tensor representing the input to the layer.
-        :param states: The tensor representing the state of the cell.
+        """Custom call method of the layer
         """
 
         previous_output = states[0]

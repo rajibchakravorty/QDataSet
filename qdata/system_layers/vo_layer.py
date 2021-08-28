@@ -1,45 +1,51 @@
 """
-This class defines a custom tensorflow layer that constructs the Vo operator using the interaction picture definition
+Module to construct the Vo operator using the interaction picture definition
 """
 
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras import layers, Model
+from numpy import(
+    array,
+    int32
+)
+from tensorflow import (
+    complex64,
+    concat,
+    constant,
+    expand_dims,
+    matmul,
+    shape,
+    tile,
+    Tensor
+)
+from tensorflow.keras import layers
 
 
 class VoLayer(layers.Layer):
+    """Vo Operator Layer
+    :param observable: The observable to be measured
+    """
 
-    def __init__(self, O, **kwargs):
-        """
-        Class constructor
+    def __init__(self, observable: array, **kwargs):
 
-        O: The observable to be measured
-        """
+        self.observable = constant(observable, dtype=complex64)
+
         # this has to be called for any tensorflow custom layer
-        super(VoLayer, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
-        self.O = tf.constant(O, dtype=tf.complex64)
-
-    def call(self, x):
+    def call(self, inputs: Tensor):     # pylint: disable=arguments-differ
+        """Custom call method of the layer
         """
-        This method must be defined for any custom layer, it is where the calculations are done.
-
-        x: a tensor representing the inputs to the layer. This is passed automatically by tensorflow.
-        """
-
         # retrieve the two inputs: Uc and UI
-        UI, Uc = x
+        unitary_i, unitary_c = inputs
 
-        UI_tilde = tf.matmul(Uc, tf.matmul(UI, Uc, adjoint_b=True))
+        unitary_tilde = matmul(unitary_c, matmul(unitary_i, unitary_c, adjoint_b=True))
 
         # expand the observable operator along batch and realizations axis
-        O = tf.expand_dims(self.O, 0)
-        O = tf.expand_dims(O, 0)
+        observable = expand_dims(expand_dims(self.observable, 0), 0)
 
-        temp_shape = tf.concat([tf.shape(Uc)[0:2], tf.constant(np.array([1, 1], dtype=np.int32))], 0)
-        O = tf.tile(O, temp_shape)
+        temp_shape = concat([shape(unitary_c)[0:2], constant(array([1, 1], dtype=int32))], 0)
+        observable = tile(observable, temp_shape)
 
-        # Construct Vo operator
-        VO = tf.matmul(O, tf.matmul(tf.matmul(UI_tilde, O, adjoint_a=True), UI_tilde))
-
-        return VO
+        # return Vo operator
+        return matmul(
+            observable,
+            matmul(matmul(unitary_tilde, observable, adjoint_a=True), unitary_tilde))

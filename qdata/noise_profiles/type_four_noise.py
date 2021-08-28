@@ -23,27 +23,32 @@ from tensorflow import (
     transpose
 )
 
+from .base_noise_profile import BaseNoiseProfile
 
-class TypeFourNoiseProfile():
-    """Noise Layer definition
 
-        total_duration      : Total duration of the input signal
-        num_time_steps      : Number of time steps
-        num_realization      : Number of realizations
-        factor : Multiplication factor
+class TypeFourNoiseProfile(BaseNoiseProfile):
+    """Type four Noise definition
+
+    :param total_duration: Total duration of the input signal
+    :param num_time_steps: Number of time steps
+    :param num_realization: Number of realizations
+    :param factor: Multiplication factor
 
    """
 
     def __init__(
             self,
-            total_duration,
-            num_time_steps,
-            num_realization,
-            **kwargs):
+            total_duration: float,
+            num_time_steps: int,
+            num_realization: int,
+            factor: float = 0.01):
 
-        self.factor = kwargs.get('factor', 0.01)
-        if 'factor' in kwargs:
-            del kwargs['factor']
+        super().__init__(
+            total_duration=total_duration,
+            num_time_steps=num_time_steps,
+            num_realization=num_realization
+        )
+        self.factor = factor
 
         # store class parameters
         self.total_duration = total_duration
@@ -58,8 +63,6 @@ class TypeFourNoiseProfile():
             reshape(
                 1 - (abs(array(time_range) - 0.5 * total_duration) * 2),
                 (1, num_time_steps, 1, 1)), dtype=float32)
-
-        super().__init__(**kwargs)
 
     def call(self, inputs):  # Colored Gaussian Non-stationary Noise
         """

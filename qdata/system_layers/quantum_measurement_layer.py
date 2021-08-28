@@ -40,9 +40,7 @@ class QuantumMeasurement(layers.Layer):
         super().__init__(**kwargs)
 
     def call(self, inputs: Tensor):     # pylint: disable=arguments-differ
-        """Custom call
-        :param inputs: a tensor representing the inputs to the layer.
-        This is passed automatically by tensorflow.
+        """Custom call method of the layer
         """
 
         # extract the different inputs of this layer which are the Vo and Uc

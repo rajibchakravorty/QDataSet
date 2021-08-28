@@ -4,7 +4,10 @@ as input, and generates the Hamiltonain matrix as an output at each time step fo
 each example in the batch
 """
 
-import numpy as np
+from numpy import (
+    array,
+    int32
+)
 from tensorflow import (
     add_n,
     cast,
@@ -27,7 +30,7 @@ class HamiltonianConstruction(layers.Layer):
     static_operators : a list of all operators that have constant coefficients
     """
 
-    def __init__(self, dynamic_operators, static_operators, **kwargs):
+    def __init__(self, dynamic_operators: array, static_operators: array, **kwargs):
         self.dynamic_operators = [constant(op, dtype=complex64) for op in dynamic_operators]
         self.static_operators = [constant(op, dtype=complex64) for op in static_operators]
         self.dim = dynamic_operators[0].shape[-1]
@@ -36,11 +39,7 @@ class HamiltonianConstruction(layers.Layer):
         super().__init__(**kwargs)
 
     def call(self, inputs: Tensor):     # pylint: disable=arguments-differ
-        """
-        This method must be defined for any custom layer, it is where the calculations are done.
-
-        inputs: a tensor representing the inputs to the layer. This is passed automatically
-        by tensorflow.
+        """Custom call method of the layer
         """
 
         hamiltonians = []
@@ -54,7 +53,7 @@ class HamiltonianConstruction(layers.Layer):
             # where d1, d2, and d3 correspond to the number of examples,
             # number of time steps of the input, and number of realizations
             temp_shape = concat(
-                [shape(inputs)[0:3], constant(np.array([1, 1], dtype=np.int32))], 0)
+                [shape(inputs)[0:3], constant(array([1, 1], dtype=int32))], 0)
 
             # add two extra dimensions for batch, time, and realization
             operator = expand_dims(dynamic_op, 0)
@@ -65,7 +64,7 @@ class HamiltonianConstruction(layers.Layer):
             operator = tile(operator, temp_shape)
 
             # repeat the pulse waveform to as dxd matrix
-            temp_shape = constant(np.array([1, 1, 1, self.dim, self.dim], dtype=np.int32))
+            temp_shape = constant(array([1, 1, 1, self.dim, self.dim], dtype=int32))
             hamiltonian = expand_dims(hamiltonian, -1)
             hamiltonian = tile(hamiltonian, temp_shape)
 
@@ -79,7 +78,7 @@ class HamiltonianConstruction(layers.Layer):
             # where d1, d2, and d2 correspond to the number of examples, number of time steps
             # of the input, and number of realizations
             temp_shape = concat(
-                [shape(inputs)[0:3], constant(np.array([1, 1], dtype=np.int32))], 0)
+                [shape(inputs)[0:3], constant(array([1, 1], dtype=int32))], 0)
 
             # add two extra dimensions for batch and time
             operator = expand_dims(static_op, 0)

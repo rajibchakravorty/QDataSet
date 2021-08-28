@@ -19,7 +19,12 @@ class NoiseLayer(layers.Layer):
    """
 
     def __init__(
-            self, total_duration, num_time_steps, num_realization, profile, **kwargs):
+            self,
+            total_duration: float,
+            num_time_steps: int,
+            num_realization: int,
+            profile: str,
+            **kwargs):
 
         super().__init__(**kwargs)
 
@@ -31,7 +36,7 @@ class NoiseLayer(layers.Layer):
         )
 
     def call(self, inputs: Tensor):  # pylint: disable=arguments-differ
-        """Realize the noise
+        """Custom call method of the layer
         """
 
         return self.noise.call(inputs)

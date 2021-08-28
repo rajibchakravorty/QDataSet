@@ -30,29 +30,36 @@ from tensorflow import (
     transpose,
 )
 
+from .base_noise_profile import BaseNoiseProfile
 
-class TypeFiveNoiseProfile():
-    """Noise Layer definition
 
-        total_duration      : Total duration of the input signal
-        num_time_steps      : Number of time steps
-        num_realization      : Number of realizations
+class TypeFiveNoiseProfile(BaseNoiseProfile):
+    """Type File Noise definition
+
+    :param total_duration      : Total duration of the input signal
+    :param num_time_steps      : Number of time steps
+    :param num_realization      : Number of realizations
 
    """
 
     def __init__(
             self,
-            total_duration,
-            num_time_steps,
-            num_realization,
-            **kwargs):
+            total_duration: float,
+            num_time_steps: int,
+            num_realization: int):
+
+        super().__init__(
+            total_duration=total_duration,
+            num_time_steps=num_time_steps,
+            num_realization=num_realization
+        )
 
         # store class parameters
         self.total_duration = total_duration
         self.num_time_steps = num_time_steps
         self.num_realization = num_realization
 
-        # define a vector of discriteized frequencies
+        # define a vector of discreteized frequencies
         frequencies = fftfreq(num_time_steps) * num_time_steps / total_duration
 
         # define time step
@@ -65,8 +72,6 @@ class TypeFiveNoiseProfile():
             tile(reshape(sqrt(s_zvalue * num_time_steps / time_step),
                          (1, 1, self.num_time_steps // 2)), (1, self.num_realization, 1)),
             dtype=complex64)
-
-        super().__init__(**kwargs)
 
     def call(self, inputs):  # PSD of 1/f + a bump
         """

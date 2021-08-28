@@ -31,9 +31,11 @@ from tensorflow import (
     transpose,
 )
 
+from .base_noise_profile import BaseNoiseProfile
 
-class TypeOneNoiseProfile():
-    """Noise Layer definition
+
+class TypeOneNoiseProfile(BaseNoiseProfile):
+    """Type One Noise definition
 
         total_duration      : Total duration of the input signal
         num_time_steps      : Number of time steps
@@ -41,14 +43,18 @@ class TypeOneNoiseProfile():
    """
 
     def __init__(
-            self, total_duration, num_time_steps, num_realization, **kwargs):
+            self,
+            total_duration: float,
+            num_time_steps: int,
+            num_realization: int):
 
-        # store class parameters
-        self.total_duration = total_duration
-        self.num_time_steps = num_time_steps
-        self.num_realization = num_realization
+        super().__init__(
+            total_duration=total_duration,
+            num_time_steps=num_time_steps,
+            num_realization=num_realization
+        )
 
-        # define a vector of discreteized frequencies
+        # define a vector of discretized frequencies
         frequencies = fftfreq(num_time_steps) * num_time_steps / total_duration
 
         # define time step
@@ -67,7 +73,6 @@ class TypeOneNoiseProfile():
                         (1, 1, self.num_time_steps // 2)),
                     (1, self.num_realization, 1)),
                 dtype=complex64)
-        super().__init__(**kwargs)
 
     def call(self, inputs):  # PSD of 1/f + a bump
         """
