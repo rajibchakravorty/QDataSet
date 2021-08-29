@@ -2,7 +2,7 @@
 This is the main class that defines machine learning model of the qubit.
 """
 
-from typing import List
+from typing import List, Dict, Any
 
 from numpy import array
 
@@ -40,7 +40,7 @@ class QuantumTFSimulator():
     measurement operators
     :param initial_states: A list of arrays representing initial states
     :param num_realizations: Number of noise realizations; defaults to 1
-    :param waveform: The type of waveform [either "Zero", "Square", or "Gaussian"];
+    :param pulse_shape: The type of waveform [either "Zero", "Square", or "Gaussian"];
     defaults to Gaussian
     :param num_pulses: Number of pulses per control sequence: defaults to 5
     :param distortion: True for simulating distortions, False for no distortions;
@@ -59,7 +59,7 @@ class QuantumTFSimulator():
                  measurement_operators: List[array],
                  initial_states: List[array],
                  num_realizations: int = 1,
-                 waveform: str = "Gaussian",
+                 pulse_shape: str = "Gaussian",
                  num_pulses: int = 5,
                  distortion: bool = False,
                  noise_profile: str = 'Type 0'):
@@ -80,12 +80,12 @@ class QuantumTFSimulator():
                     evolution_time,
                     num_time_steps,
                     num_pulses,
-                    waveform)(dummy_input) for _ in dynamic_operators]
+                    pulse_shape)(dummy_input) for _ in dynamic_operators]
             pulse_parameters = layers.Concatenate(axis=-1)([pulse[0] for pulse in pulses])
             pulse_time_domain = layers.Concatenate(axis=-1)([pulse[1] for pulse in pulses])
         else:
             pulse_parameters, pulse_time_domain = SignalGenerator(
-                evolution_time, num_time_steps, num_pulses, waveform)(dummy_input)
+                evolution_time, num_time_steps, num_pulses, pulse_shape)(dummy_input)
 
         if distortion:
             distorted_pulse_time_domain = LTILayer(
@@ -173,6 +173,21 @@ class QuantumTFSimulator():
         # concatenate all the measurement outcomes
         expectations = layers.Concatenate(axis=-1)(sum(expectations, []))
 
+        # save the simulation parameters
+        self.simulation_parameters = {
+            "evolution_time" : evolution_time,
+            "num_time_steps" : num_time_steps,
+            "dynamic_operators": dynamic_operators,
+            "static_operators": static_operators,
+            "noise_operators": noise_operators,
+            "measurement_operators": measurement_operators,
+            "initial_states": initial_states,
+            "num_realizations": num_realizations,
+            "pulse_shape": pulse_shape,
+            "num_pulses": num_pulses,
+            "distortion": distortion,
+            "noise_profile": noise_profile
+        }
         # define now the tensorflow model
         self.model = Model(
             inputs=dummy_input,
@@ -202,3 +217,11 @@ class QuantumTFSimulator():
         :returns: a list of arrays representing H0,H1,U0,U0(T),VO,expectations respectively
         """
         return self.model.predict(simulator_inputs, verbose=1, batch_size=batch_size)
+
+    def get_simulation_parameters(self)->Dict[str, Any]:
+        """Returns the parameters of simulator object as a dictionary
+
+        :return: A dictionary object with simulation parameters
+        """
+
+        return self.simulation_parameters
