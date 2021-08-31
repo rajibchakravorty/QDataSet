@@ -13,7 +13,7 @@ def check_noise(simulation_parameters: Dict[str, Any], dimension: int):
     This function calculates the coherence measurements to check the noise behaviour,
     based on the simulation parameters passed as a dictionary
 
-    :param simulation_parameters: Simulation Parameteres
+    :param simulation_parameters: Simulation Parameters
     :param dimension: Dimension of the system
     """
     simulator = QuantumTFSimulator(

@@ -4,6 +4,10 @@ version = "0.1.0"
 description = "Dataset for applying ML on quantum systems."
 authors = ["Rajib Chakravorty <4748396+rajibchakravorty@users.noreply.github.com>"]
 license = "MIT"
+packages = [
+    { include = "qmldataset" }
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -22,5 +26,5 @@ versioning = "pep"
 prereleases = true
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry>=1.0.0", "setuptools>=41.0.0"]
+build-backend = "poetry.masonry.api"

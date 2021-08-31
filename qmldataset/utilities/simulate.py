@@ -52,7 +52,7 @@ def save_simulation_result(
 ):
     """Run the simulation and save the result
 
-    :param num_examples: Number of examples to create
+    :param num_examples: Number of experiments to create
     :param batch_size: Size of each batch
     :param distortion: True if the simulator is for distorted pulse, False otherwise
     :param simulator: Simulator object
@@ -125,7 +125,7 @@ def simulate(
 
     :param simulation_parameters: Parameters to create a simulator from
     :param simulation_name: A descriptive name for the simulation
-    :param num_examples: Number of examples to create
+    :param num_examples: Number of experiments to create
     :param batch_size: Size of each batch
     :param output_location: The absolute path of the folder where the resulting zip files
     will be saved;for each call there will be 2 files creates - one without distortion and

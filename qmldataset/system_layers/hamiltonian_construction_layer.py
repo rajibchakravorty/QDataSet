@@ -50,7 +50,7 @@ class HamiltonianConstruction(layers.Layer):
             hamiltonian = cast(inputs[:, :, :, idx_op:idx_op + 1], complex64)
 
             # construct a tensor in the form of a row vector whose elements are [d1,d2,d3, 1,1],
-            # where d1, d2, and d3 correspond to the number of examples,
+            # where d1, d2, and d3 correspond to the number of experiments,
             # number of time steps of the input, and number of realizations
             temp_shape = concat(
                 [shape(inputs)[0:3], constant(array([1, 1], dtype=int32))], 0)
@@ -75,7 +75,7 @@ class HamiltonianConstruction(layers.Layer):
         # loop over the strengths of all static operators
         for static_op in self.static_operators:
             # construct a tensor in the form of a row vector whose elements are [d1,d2,d3,1,1],
-            # where d1, d2, and d2 correspond to the number of examples, number of time steps
+            # where d1, d2, and d2 correspond to the number of experiments, number of time steps
             # of the input, and number of realizations
             temp_shape = concat(
                 [shape(inputs)[0:3], constant(array([1, 1], dtype=int32))], 0)
