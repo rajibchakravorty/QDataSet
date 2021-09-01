@@ -1,7 +1,7 @@
 """Sample use of qmldataset package
 """
 
-from qmldataset.experiments import run_default_experiment
+from qmldataset import run_default_experiment
 
 
 def create_experiment():
@@ -9,10 +9,12 @@ def create_experiment():
     configured in the package.
     """
 
-    experiment = 'G_1q_X'
-    num_examples = 2
-    batch_size = 10
-    output_location = "/home/rchakrav/progs/qmldataset_result/G_1q_X"
+    # experiment = 'G_1q_X'
+    # experiment = 'G_1q_XZ_N1'
+    experiment = 'G_1q_XZ_N2'
+    num_examples = 2    # 2000
+    batch_size = 10     # 50
+    output_location = "/home/rchakrav/progs/qmldataset_result/"
 
     run_default_experiment(
         experiment_config=experiment,

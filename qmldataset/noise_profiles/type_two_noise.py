@@ -5,7 +5,6 @@ class for generating type 2 noise
 from numpy import (
     array,
     int32,
-    reshape
 )
 
 from tensorflow import (
@@ -15,6 +14,7 @@ from tensorflow import (
     nn,
     ones,
     random,
+    reshape,
     shape,
     transpose
 )

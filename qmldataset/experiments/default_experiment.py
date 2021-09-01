@@ -1,8 +1,8 @@
 """Create one of the default experiments, save experiment results
 """
 
-from . import config_G1q_X
 from .custom_experiment import run_custom_experiment
+from .default_config_names import default_configs
 
 
 def run_default_experiment(
@@ -13,15 +13,18 @@ def run_default_experiment(
 ):
     """
     :param experiment_config: An experiment configuration; must be one of
-    ['G_1q_X']
+    ['G_1q_X', 'G_1q_XZ_N1']
     :param num_examples: Number of experiments to create
     :param batch_size: Size of each batch
     :param output_location: The absolute path of the temporary location to save intermediate
     results
-    """
-    if experiment_config == "G_1q_X":
-        configuration = config_G1q_X
 
+    :raises ValueError: If experiment config is not one of the default ones.
+    """
+    if experiment_config not in default_configs:
+        raise ValueError('{} is not knows configuration'.format(experiment_config))
+
+    configuration = default_configs[experiment_config]
     run_custom_experiment(
         evolution_time=configuration.evolution_time,
         num_time_steps=configuration.num_time_steps,

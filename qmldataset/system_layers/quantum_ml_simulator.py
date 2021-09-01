@@ -45,7 +45,7 @@ class QuantumTFSimulator():
     :param num_pulses: Number of pulses per control sequence: defaults to 5Nice
     :param distortion: True for simulating distortions, False for no distortions;
     defaults to False
-    :param noise_profile : The type of noise, a value chosen from
+    :param noise_profile : A list of noies types. Each type must be one of
     ['Type 0','Type 1','Type 2','Type 4','Type 5','Type 6'];
     defaults to 'Type 0'
     """
@@ -62,7 +62,7 @@ class QuantumTFSimulator():
                  pulse_shape: str = "Gaussian",
                  num_pulses: int = 5,
                  distortion: bool = False,
-                 noise_profile: str = 'Type 0'):
+                 noise_profile: List[str] = 'Type 0'):
 
         time_step = evolution_time / num_time_steps
         self.time_range = [
@@ -73,7 +73,7 @@ class QuantumTFSimulator():
         dummy_input = layers.Input(shape=(1,))
 
         # define the custom tensorflow layer that generates
-        # the control pulses for each direction and concatente if neccesary
+        # the control pulses for each direction and concatenate if necessary
         if len(dynamic_operators) > 1:
             pulses = [
                 SignalGenerator(
@@ -118,7 +118,7 @@ class QuantumTFSimulator():
                 evolution_time,
                 num_time_steps,
                 num_realizations,
-                noise_profile)(dummy_input)
+                noise_profile[0])(dummy_input)
 
         # define the custom tensorflow layer that constructs the
         # H0 part of the Hamiltonian from parameters at each time step

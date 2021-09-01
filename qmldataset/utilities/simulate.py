@@ -168,3 +168,4 @@ def simulate(
             simulation_with_distortion,
             output_location
         )
+    print("Pulses with distortion saved in {}".format(zipfile_name))
