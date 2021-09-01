@@ -5,7 +5,7 @@ from typing import Dict, Any
 from numpy import average, eye, zeros
 from numpy.linalg import norm
 
-from ..system_layers import QuantumTFSimulator
+from ..system_layers.quantum_ml_simulator import QuantumTFSimulator
 
 
 def check_noise(simulation_parameters: Dict[str, Any], dimension: int):

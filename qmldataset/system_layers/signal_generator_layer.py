@@ -4,7 +4,7 @@
 from tensorflow import Tensor
 from tensorflow.keras import layers
 
-from ..control_pulse import create_control_pulses
+from ..control_pulse.control_pulse_generators import create_control_pulses
 
 
 class SignalGenerator(layers.Layer):

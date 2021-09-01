@@ -3,7 +3,7 @@
 Configuration for experiment G_1q_X
 """
 import numpy as np
-from ..utilities import pauli_operators
+from ..utilities.constants import pauli_operators
 
 name = "G_1q_X"
 

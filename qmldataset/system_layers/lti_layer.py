@@ -64,7 +64,7 @@ class LTILayer(layers.Layer):
         # evaluate the full transformation and convert to a tensor of correct shape
         self.transformation = constant(
             reshape(
-                dft_matrix.conj().total_duration @ response @ dft_matrix,
+                dft_matrix.conj().T @ response @ dft_matrix,
                 (1, 1, num_time_steps, num_time_steps)), dtype=complex64)
 
     def call(self, inputs: Tensor):     # pylint: disable=arguments-differ

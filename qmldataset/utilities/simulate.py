@@ -12,7 +12,7 @@ import pickle
 
 import numpy as np
 
-from ..system_layers import QuantumTFSimulator
+from ..system_layers.quantum_ml_simulator import QuantumTFSimulator
 
 
 def create_simulation(
@@ -135,7 +135,7 @@ def simulate(
     simulator = create_simulation(simulation_parameters, False)
     # 2) Run the simulator for pulses without distortions and collect/save the results
     print("Running simulator for pulses without distortion")
-    zipfile_name = join(output_location, simulation_name, '.zip')
+    zipfile_name = join(output_location, '{}.zip'.format(simulation_name))
     with zipfile.ZipFile(
             zipfile_name,
             mode='w',
@@ -154,7 +154,7 @@ def simulate(
 
     print("Running the simulation for pulses with distortion")
     simulator = create_simulation(simulation_parameters, True)
-    zipfile_name = join(output_location, simulation_name, '_distortion.zip')
+    zipfile_name = join(output_location, '{}_distortion.zip'.format(simulation_name))
     with zipfile.ZipFile(
             zipfile_name,
             mode='w',

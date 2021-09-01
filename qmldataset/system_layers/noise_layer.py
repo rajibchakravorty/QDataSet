@@ -5,7 +5,7 @@ class for generating time-domain realizations of noise
 from tensorflow import Tensor
 from tensorflow.keras import layers
 
-from ..noise_profiles import create_noise_profile
+from ..noise_profiles.create_noise import create_noise_profile
 
 
 class NoiseLayer(layers.Layer):

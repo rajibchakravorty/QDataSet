@@ -42,7 +42,7 @@ class QuantumTFSimulator():
     :param num_realizations: Number of noise realizations; defaults to 1
     :param pulse_shape: The type of waveform [either "Zero", "Square", or "Gaussian"];
     defaults to Gaussian
-    :param num_pulses: Number of pulses per control sequence: defaults to 5
+    :param num_pulses: Number of pulses per control sequence: defaults to 5Nice
     :param distortion: True for simulating distortions, False for no distortions;
     defaults to False
     :param noise_profile : The type of noise, a value chosen from
@@ -118,7 +118,7 @@ class QuantumTFSimulator():
                 evolution_time,
                 num_time_steps,
                 num_realizations,
-                noise_profile[0])(dummy_input)
+                noise_profile)(dummy_input)
 
         # define the custom tensorflow layer that constructs the
         # H0 part of the Hamiltonian from parameters at each time step

@@ -6,7 +6,9 @@ from typing import Tuple
 from numpy import (
     array,
     int32,
-    triu_indices
+    triu_indices,
+    reshape as npreshape,
+    ones as npones,
 )
 
 from tensorflow import (
@@ -92,18 +94,18 @@ def create_core_parameters(
     pulse width, and 2 matrices; the matrices determine the position of the pulses
     """
     time_range = constant(
-        reshape([(0.5 * total_time / num_time_steps) +
-                 (j * total_time / num_time_steps) for j in range(num_time_steps)],
-                (1, num_time_steps, 1, 1)), dtype=float32)
+        npreshape([(0.5 * total_time / num_time_steps) +
+                  (j * total_time / num_time_steps) for j in range(num_time_steps)],
+                  (1, num_time_steps, 1, 1)), dtype=float32)
 
     pulse_width = (0.5 * total_time / max_control_pulse)
 
-    a_matrix = ones((max_control_pulse, max_control_pulse))
+    a_matrix = npones((max_control_pulse, max_control_pulse))
     a_matrix[triu_indices(max_control_pulse, 1)] = 0
     a_matrix = constant(
-        reshape(a_matrix, (1, max_control_pulse, max_control_pulse)), dtype=float32)
+        npreshape(a_matrix, (1, max_control_pulse, max_control_pulse)), dtype=float32)
 
-    b_matrix = reshape(
+    b_matrix = npreshape(
         [idx + 0.5 for idx in range(max_control_pulse)], (1, max_control_pulse, 1)) * pulse_width
     b_matrix = constant(b_matrix, dtype=float32)
 

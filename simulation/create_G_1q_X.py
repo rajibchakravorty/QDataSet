@@ -12,7 +12,7 @@ def create_experiment():
     experiment = 'G_1q_X'
     num_examples = 2
     batch_size = 10
-    output_location = "./custom_result"
+    output_location = "/home/rchakrav/progs/qmldataset_result/G_1q_X"
 
     run_default_experiment(
         experiment_config=experiment,

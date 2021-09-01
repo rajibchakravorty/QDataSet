@@ -4,7 +4,8 @@
 from typing import List
 from numpy import array
 
-from .. utilities import check_noise, simulate
+from .. utilities.check_noise import check_noise
+from ..utilities.simulate import simulate
 
 
 def run_custom_experiment(
