@@ -6,8 +6,7 @@ from numpy import (  # pylint: disable=redefined-builtin
     abs,
     array,
     int32,
-    reshape,
-    tile
+    reshape as npreshape,
 )
 
 from tensorflow import (
@@ -18,8 +17,10 @@ from tensorflow import (
     nn,
     ones,
     random,
+    reshape,
     square,
     shape,
+    tile,
     transpose
 )
 
@@ -60,7 +61,7 @@ class TypeFourNoiseProfile(BaseNoiseProfile):
             (j * total_duration / num_time_steps) for j in range(num_time_steps)]
         self.color = ones([self.num_time_steps // 4, 1, 1], dtype=float32)
         self.non_stationary = constant(
-            reshape(
+            npreshape(
                 1 - (abs(array(time_range) - 0.5 * total_duration) * 2),
                 (1, num_time_steps, 1, 1)), dtype=float32)
 

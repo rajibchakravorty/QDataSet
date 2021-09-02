@@ -23,4 +23,4 @@ initial_states = [
 num_realizations = 2000
 pulse_shape = "Gaussian"
 num_pulses = 5
-noise_profile = ['Type 3']
+noise_profile = ['Type 4']
