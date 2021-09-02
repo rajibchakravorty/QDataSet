@@ -98,7 +98,7 @@ class QuantumTFSimulator():
         if len(noise_operators) > 1:
             noise = []
             for profile in noise_profile:
-                if profile != 6:  # uncorrelated along different directions
+                if profile != 'Type 6':  # uncorrelated along different directions
                     noise.append(
                         NoiseLayer(
                             evolution_time,

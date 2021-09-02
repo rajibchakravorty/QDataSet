@@ -15,7 +15,7 @@ dynamic_operators = [0.5*pauli_operators[1],
                      0.5*pauli_operators[2]]
 static_operators = [0.5*pauli_operators[3]*omega]
 noise_operators = [0.5*pauli_operators[1],
-                     0.5*pauli_operators[3]]
+                   0.5*pauli_operators[3]]
 initial_states = [
     np.array([[0.5, 0.5], [0.5, 0.5]]), np.array([[0.5, -0.5], [-0.5, 0.5]]),
     np.array([[0.5, -0.5j], [0.5j, 0.5]]), np.array([[0.5, 0.5j], [-0.5j, 0.5]]),
