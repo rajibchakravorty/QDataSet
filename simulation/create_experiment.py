@@ -11,7 +11,8 @@ def create_experiment():
 
     # experiment = 'G_1q_X'
     # experiment = 'G_1q_XZ_N1'
-    experiment = 'G_1q_XZ_N2'
+    # experiment = 'G_1q_XZ_N2'
+    experiment = 'G_1q_XZ_N3'
     num_examples = 2    # 2000
     batch_size = 10     # 50
     output_location = "/home/rchakrav/progs/qmldataset_result/"

@@ -6,7 +6,7 @@ from numpy import (  # pylint: disable=redefined-builtin
     abs,
     array,
     int32,
-    reshape
+    reshape as npreshape
 )
 
 from tensorflow import (
@@ -17,12 +17,14 @@ from tensorflow import (
     nn,
     ones,
     random,
+    reshape,
     shape,
     tile as tftile,
     transpose
 )
 
 from .base_noise_profile import BaseNoiseProfile
+
 
 class TypeThreeNoiseProfile(BaseNoiseProfile):
     """Type three Noise definition
@@ -54,7 +56,7 @@ class TypeThreeNoiseProfile(BaseNoiseProfile):
         self.color = ones(
             [self.num_time_steps // 4, 1, 1], dtype=float32)
         self.non_stationary = constant(
-            reshape(
+            npreshape(
                 1 - (abs(array(time_range) - 0.5 * total_duration) * 2),
                 (1, num_time_steps, 1, 1)), dtype=float32)
 
