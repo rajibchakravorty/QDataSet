@@ -16,7 +16,8 @@ def create_experiment():
     # experiment = 'G_1q_XZ_N4'
     # experiment = 'G_1q_XY'
     # experiment = 'G_1q_XY_XZ_N1N5'
-    experiment = 'G_1q_XY_XZ_N1N6'
+    # experiment = 'G_1q_XY_XZ_N1N6'
+    experiment = 'G_1q_XY_XZ_N3N6'
 
     num_examples = 2    # 2000
     batch_size = 10     # 50
