@@ -15,7 +15,7 @@ import numpy as np
 from ..system_layers.quantum_ml_simulator import QuantumTFSimulator
 
 
-def create_simulation(
+def create_simulator(
         simulation_parameters: Dict[str, Any],
         distortion: bool
 ) -> QuantumTFSimulator:
@@ -63,7 +63,6 @@ def save_simulation_result(
     results
     """
     for idx_batch in range(num_examples // batch_size):
-        ###########################################################################
         print("Simulating and storing batch %d\n" % idx_batch)
         start = time.time()
         simulation_results = simulator.simulate(
@@ -78,8 +77,7 @@ def save_simulation_result(
         _, unitary_i, \
         expectations = simulation_results[4:10]
         vector_obs = simulation_results[10:]
-        ###########################################################################
-        # 4) Save the results in an external file and zip everything
+
         for idx_ex in range(batch_size):
             results = {"sim_parameters": simulator.get_simulation_parameters(),
                        "elapsed_time": elapsed_time,
@@ -132,10 +130,12 @@ def simulate(
     the other with distortion of pulses
     """
 
-    simulator = create_simulation(simulation_parameters, False)
+    simulator = create_simulator(simulation_parameters, False)
     # 2) Run the simulator for pulses without distortions and collect/save the results
     print("Running simulator for pulses without distortion")
-    zipfile_name = join(output_location, '{}.zip'.format(simulation_name))
+    pulse_shape = simulator.simulation_parameters["pulse_shape"]
+    zipfile_name = join(
+        output_location, '{}_{}.zip'.format(pulse_shape[0], simulation_name))
     with zipfile.ZipFile(
             zipfile_name,
             mode='w',
@@ -153,8 +153,9 @@ def simulate(
     print("Pulses without distortion saved in {}".format(zipfile_name))
 
     print("Running the simulation for pulses with distortion")
-    simulator = create_simulation(simulation_parameters, True)
-    zipfile_name = join(output_location, '{}_distortion.zip'.format(simulation_name))
+    simulator = create_simulator(simulation_parameters, True)
+    zipfile_name = join(
+        output_location, '{}_{}_distortion.zip'.format(pulse_shape[0], simulation_name))
     with zipfile.ZipFile(
             zipfile_name,
             mode='w',

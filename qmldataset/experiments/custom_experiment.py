@@ -63,8 +63,8 @@ def run_custom_experiment(
         "measurement_operators": measurement_operators,
         "initial_states": initial_states,
         "num_realizations": num_realizations,
-        "pulse_shape": pulse_shape,
         "num_pulses": num_pulses,
+        "pulse_shape": pulse_shape,
         "noise_profile": noise_profile
     }
 

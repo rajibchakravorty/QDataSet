@@ -7,6 +7,7 @@ from .default_config_names import default_configs
 
 def run_default_experiment(
         experiment_config: str,
+        pulse_shape: str,
         num_examples: int,
         batch_size: int,
         output_location: str
@@ -14,6 +15,7 @@ def run_default_experiment(
     """
     :param experiment_config: An experiment configuration; must be one of
     ['G_1q_X', 'G_1q_XZ_N1']
+    :param pulse_shape: Shape of the pulse; One of 'Gaussian', 'Square, 'Zero'
     :param num_examples: Number of experiments to create
     :param batch_size: Size of each batch
     :param output_location: The absolute path of the temporary location to save intermediate
@@ -35,7 +37,7 @@ def run_default_experiment(
         measurement_operators=configuration.measurement_operators,
         initial_states=configuration.initial_states,
         num_realizations=configuration.num_realizations,
-        pulse_shape=configuration.pulse_shape,
+        pulse_shape=pulse_shape,
         num_pulses=configuration.num_pulses,
         noise_profile=configuration.noise_profile,
         experiment_name=configuration.name,

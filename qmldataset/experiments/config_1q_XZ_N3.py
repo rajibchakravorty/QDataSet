@@ -1,11 +1,11 @@
 # pylint: disable=invalid-name
 """
-Configuration for experiment G_1q_X
+Configuration for experiment 1q_XZ_N3
 """
 import numpy as np
 from ..utilities.constants import pauli_operators
 
-name = "G_1q_X"
+name = "1q_XZ_N3"
 
 dimension = 2
 evolution_time = 1
@@ -21,6 +21,5 @@ initial_states = [
     np.array([[1, 0], [0, 0]]), np.array([[0, 0], [0, 1]])
 ]
 num_realizations = 2000
-pulse_shape = "Gaussian"
 num_pulses = 5
-noise_profile = ['Type 0']
+noise_profile = ['Type 3']

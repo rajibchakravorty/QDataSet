@@ -66,8 +66,8 @@ class QuantumTFSimulator():
 
         time_step = evolution_time / num_time_steps
         self.time_range = [
-            (0.5 * evolution_time / num_time_steps) +
-            (j * evolution_time / num_time_steps) for j in range(num_time_steps)]
+            (0.5 * time_step) +
+            (j * time_step) for j in range(num_time_steps)]
 
         # define a dummy input layer needed to generate the control pulses and noise
         dummy_input = layers.Input(shape=(1,))
@@ -159,7 +159,7 @@ class QuantumTFSimulator():
         # construct the Vo operators
         unitary_cext = layers.Lambda(
             lambda x: tile(x, constant([1, num_realizations, 1, 1], dtype=int32)))(unitary_c)
-        observables= [
+        observables = [
             VoLayer(operator, name="V%d" % idx_op)(
                 [unitary_i, unitary_cext])
             for idx_op, operator in enumerate(measurement_operators)]
