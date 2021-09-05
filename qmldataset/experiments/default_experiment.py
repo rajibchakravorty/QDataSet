@@ -14,7 +14,10 @@ def run_default_experiment(
 ):
     """
     :param experiment_config: An experiment configuration; must be one of
-    ['G_1q_X', 'G_1q_XZ_N1']
+    ['1q_X', '1q_XZ_N1', '1q_XZ_N2', '1q_XZ_N3', '1q_XZ_N4',
+     '1q_XY', '1q_XY_XZ_N1N5', '1q_XY_XZ_N1N6', '1q_XY_XZ_N3N6',
+     '2q_IX_XI_XX', '2q_IX_XI_XX_IZ_ZI_N1N5', '2q_IX_XI_XX_IZ_ZI_N1N6',
+     '2q_IX_XI_IZ_ZI_N1N6']
     :param pulse_shape: Shape of the pulse; One of 'Gaussian', 'Square, 'Zero'
     :param num_examples: Number of experiments to create
     :param batch_size: Size of each batch
