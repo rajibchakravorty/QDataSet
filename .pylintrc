@@ -170,7 +170,6 @@ disable=
     too-many-statements,
     ## Disable false positives due to a bug in astroid, can be removed when
     ## astroid>2.3.3 is released, see
-    ## https://q-ctrl.atlassian.net/browse/QENG-605
     unsubscriptable-object,
     ## Handled by Black
     bad-continuation,
