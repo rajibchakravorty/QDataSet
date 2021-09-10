@@ -111,4 +111,4 @@ junit.xml
 *.DS_Store
 .vscode/*
 
-.idea/*
+.idea
