@@ -109,6 +109,7 @@ junit.xml
 
 #Mac related files
 *.DS_Store
+
 .vscode/*
 
-.idea
+.idea/*
