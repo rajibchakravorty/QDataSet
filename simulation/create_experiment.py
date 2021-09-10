@@ -23,9 +23,9 @@ def create_experiment():
     # experiment = '2q_IX_XI_XX_IZ_ZI_N1N6'
     # experiment = '2q_IX_XI_IZ_ZI_N1N6'
 
-    num_examples = 1    # 10000
-    batch_size = 25     # 50
-    output_location = "/home/rchakrav/progs/qmldataset_result/"
+    num_examples = 10    # 10000
+    batch_size = 5     # 50
+    output_location = "../qmldataset_result/"
     pulse_shape = "Square"
 
     run_default_experiment(
