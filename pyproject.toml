@@ -12,7 +12,7 @@ packages = [
 python = "^3.8"
 qutip = "^4.6.2"
 numpy = "1.19.5"
-tensorflow = "^2.6.0"
+tensorflow = "2.4"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.10.2"
