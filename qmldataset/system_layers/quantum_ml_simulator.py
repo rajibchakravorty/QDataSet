@@ -175,8 +175,8 @@ class QuantumTFSimulator():
 
         # save the simulation parameters
         self.simulation_parameters = {
-            "evolution_time" : evolution_time,
-            "num_time_steps" : num_time_steps,
+            "evolution_time": evolution_time,
+            "num_time_steps": num_time_steps,
             "dynamic_operators": dynamic_operators,
             "static_operators": static_operators,
             "noise_operators": noise_operators,
@@ -186,7 +186,8 @@ class QuantumTFSimulator():
             "pulse_shape": pulse_shape,
             "num_pulses": num_pulses,
             "distortion": distortion,
-            "noise_profile": noise_profile
+            "noise_profile": noise_profile,
+            "time_range": self.time_range
         }
         # define now the tensorflow model
         self.model = Model(

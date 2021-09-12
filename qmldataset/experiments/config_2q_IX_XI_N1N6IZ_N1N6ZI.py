@@ -1,11 +1,11 @@
 # pylint: disable=invalid-name
-"""Config for 2q_IX-XI-XX_IZ-ZI_N1-N6 experiment
+"""Config for 2q_IX_XI_N1N6IZ_N1N6ZI experiment
 """
 from itertools import product
 import numpy as np
 from ..utilities.constants import pauli_operators
 
-name = "2q_IX_XI_XX_IZ_ZI_N1N6"
+name = "2q_IX_XI_N1N6IZ_N1N6ZI"
 
 
 dimension = 4
@@ -14,8 +14,7 @@ num_time_steps = 1024
 omega = [10, 12]
 dynamic_operators = [
     np.kron(pauli_operators[1], pauli_operators[0]),
-    np.kron(pauli_operators[0], pauli_operators[1]),
-    np.kron(pauli_operators[1], pauli_operators[1])]
+    np.kron(pauli_operators[0], pauli_operators[1])]
 static_operators = [
     omega[0]*np.kron(pauli_operators[3], pauli_operators[0]),
     omega[1]*np.kron(pauli_operators[0], pauli_operators[3])]

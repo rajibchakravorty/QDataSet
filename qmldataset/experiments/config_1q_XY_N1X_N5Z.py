@@ -1,11 +1,11 @@
 # pylint: disable=invalid-name
 """
-Configuration for experiment 1q_XY_XZ_N1N5
+Configuration for experiment 1q_XY_N1X_N5Z
 """
 import numpy as np
 from ..utilities.constants import pauli_operators
 
-name = "1q_XY_XZ_N1N5"
+name = "1q_XY_N1X_N5Z"
 
 dimension = 2
 evolution_time = 1
