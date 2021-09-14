@@ -52,19 +52,19 @@ This repository supports a set of default 1q and 2q experiments [similar to the 
 The other experiment options you can use are
 
 ```
-'1q_X'
-'1q_XZ_N1'
-'1q_XZ_N2'
-'1q_XZ_N3'
-'1q_XZ_N4'
-'1q_XY'
-'1q_XY_XZ_N1N5'
-'1q_XY_XZ_N1N6'
-'1q_XY_XZ_N3N6'
-'2q_IX_XI_XX'
-'2q_IX_XI_XX_IZ_ZI_N1N5'
-'2q_IX_XI_XX_IZ_ZI_N1N6'
-'2q_IX_XI_IZ_ZI_N1N6'
+'1q_X' - 1-qubit, Control X-Axis, No Noise
+'1q_X_N1Z' - 1-qubit, Control X-Axis, Type 1 Noise on Z-Axis
+'1q_X_N2Z' - 1-qubit, Control X-Axis, Type 2 Noise on Z-Axis
+'1q_X_N3Z' - 1-qubit, Control X-Axis, Type 3 Noise on Z-Axis
+'1q_X_N4Z' - 1-qubit, Control X-Axis, Type 4 Noise on Z-Axis
+'1q_XY' - 1-qubit, Control X and Y-Axis, No Noise
+'1q_XY_N1X_N5Z' - 1-qubit, Control X and Y-Axis, Type 1 and Type 5 Noises on Z - Axis
+'1q_XY_N1X_N6Z' - 1-qubit, Control X and Y-Axis, Type 1 and Type 6 Noises on Z - Axis
+'1q_XY_N3X_N6Z' - 1-qubit, Control X and Y-Axis, Type 3 and Type 5 Noises on Z - Axis
+'2q_IX_XI_XX' - 2-qubit, Control X Axis on both qubits and interacting X-Axis, No Noise
+'2q_IX_XI_N1N6IZ_N1N6ZI' - 2-qubit, Control X Axis on both qubits, Type 1 and Type 6 Noises on Z-Axis on both qubits
+'2q_IX_XI_XX_N1N5IZ_N1N5ZI' - 2-qubit, Control X Axis on both qubits and interacting X-Axis, Type 1 and Type 5 Noises on Z-Axis on both qubits
+'2q_IX_XI_XX_N1N6IZ_N1N6ZI' - 2-qubit, Control X Axis on both qubits and interacting X-Axis, Type 1 and Type 6 Noises on Z-Axis on both qubits
 ```
 
 For each option, you can use `"Square"` or `"Gaussian"` as `pulse_shape`.

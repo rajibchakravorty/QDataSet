@@ -1,6 +1,7 @@
 # pylint: disable=invalid-name
 """
-Configuration for experiment 1q_XY_N1X_N5Z
+Configuration for experiment 1q_XY_N1X_N5Z - 1-qubit, Control on X and Y -Axes, Type 1 Noise
+on X Axis, Type 5 Noise on Z Axis
 """
 import numpy as np
 from ..utilities.constants import pauli_operators

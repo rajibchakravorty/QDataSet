@@ -1,5 +1,6 @@
 # pylint: disable=invalid-name
-"""Config for 2q_IX_XI_XX_N1N5IZ_N1N5ZI experiment
+"""Config for 2q_IX_XI_XX_N1N5IZ_N1N5ZI experiment - 2-qubit, Control on X Axis for
+both qubits and X Axis interacting control, Type 1 and Type 5 Noise on Z axis for both qubits
 """
 from itertools import product
 import numpy as np
