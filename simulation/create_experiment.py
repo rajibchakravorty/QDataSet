@@ -27,19 +27,15 @@ def create_experiment():
         distortion=True,
         pulse_shape="Square"
     )
-    num_examples = 1
 
-    for idx in range(5):
-        print("running example {}".format(idx))
-        experiment_result = run_experiment(
-            simulator=simulator,
-            num_examples=num_examples
-        )
+    # run and gather of one experiment result
+    experiment_result = run_experiment(
+        simulator=simulator
+    )
 
-        # for result in experiment_result:
-        #     for key in result:
-        #         print("-- {} --".format(key))
-        #         print("-- {} --".format(result[key]))
+    for param in experiment_result:
+        print("-- {} --".format(param))
+        print("-- {} --".format(experiment_result[param]))
 
 
 if __name__ == '__main__':

@@ -90,8 +90,7 @@ def create_custom_simulator(
         num_pulses: int,
         noise_profile: List[str],
         distortion: bool,
-        pulse_shape: str,
-
+        pulse_shape: str
 ) -> QuantumMLSimulator:
 
     """

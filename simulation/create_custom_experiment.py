@@ -2,7 +2,8 @@
 """
 from itertools import product
 from numpy import array, kron
-from qmldataset import pauli_operators, run_custom_experiment
+from qmldataset import pauli_operators, create_custom_simulator, run_experiment
+
 
 def create_experiment():
     """In this sample usage we will create a custom experiment
@@ -35,13 +36,10 @@ def create_experiment():
     num_realizations = 500
     num_pulses = 5
     noise_profile = ['Type 1', 'Type 5']
-    experiment_name = 'custom_2q_IX_XI_XX_N1N5Z_N1N5Z'
-    num_examples = 100
-    batch_size = 4
-    output_location = '/home/rchakrav/progs/qmldataset_result'
     pulse_shape = "Square"
+    distortion = True
 
-    run_custom_experiment(
+    simulator = create_custom_simulator(
         evolution_time=evolution_time,
         num_time_steps=num_time_steps,
         dimension=dimension,
@@ -54,11 +52,17 @@ def create_experiment():
         pulse_shape=pulse_shape,
         num_pulses=num_pulses,
         noise_profile=noise_profile,
-        experiment_name=experiment_name,
-        num_examples=num_examples,
-        batch_size=batch_size,
-        output_location=output_location
+        distortion=True
     )
+
+    # run and gather of one experiment result
+    experiment_result = run_experiment(
+        simulator=simulator
+    )
+
+    for param in experiment_result:
+        print("-- {} --".format(param))
+        print("-- {} --".format(experiment_result[param]))
 
 
 if __name__ == '__main__':
