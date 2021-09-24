@@ -48,7 +48,7 @@ class QuantumMeasurement(layers.Layer):
 
         # construct a tensor in the form of a row vector whose
         # elements are [d1,1,1,1], where d1 corresponds to the
-        # number of experiments of the input
+        # number of configurations of the input
         temp_shape = concat(
             [shape(examples)[0:1], constant(array([1, 1, 1], dtype=int32))], 0)
 

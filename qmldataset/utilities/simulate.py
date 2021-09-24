@@ -3,30 +3,29 @@ Module to generate the dataset and store it
 based on the simulation parameters passed as a dictionary
 """
 
-from typing import Dict, Any
-from os import remove
-from os.path import join
-import time
-import zipfile
-import pickle
+from typing import Dict, Any, List
 
-import numpy as np
+from numpy import array
 
-from ..system_layers.quantum_ml_simulator import QuantumTFSimulator
+from ..system_layers.quantum_ml_simulator import QuantumMLSimulator
+
+from ..configurations.prepare_configs import get_default_configuration, get_custom_config
 
 
 def create_simulator(
         simulation_parameters: Dict[str, Any],
+        pulse_shape: str,
         distortion: bool
-) -> QuantumTFSimulator:
+) -> QuantumMLSimulator:
     """Creates a simulator with specified parameters
 
     :param simulation_parameters: A dictionary with simulation parameters
+    :param pulse_shape: Shape of the pulse; must be one of `Gaussian`, `Square` or `Zero`
     :param distortion: True if distortion to be added, False otherwise
 
     :returns: The simulator created from given parameters
     """
-    return QuantumTFSimulator(
+    return QuantumMLSimulator(
         simulation_parameters["evolution_time"],
         simulation_parameters["num_time_steps"],
         simulation_parameters["dynamic_operators"],
@@ -35,138 +34,115 @@ def create_simulator(
         simulation_parameters["measurement_operators"],
         simulation_parameters["initial_states"],
         simulation_parameters["num_realizations"],
-        simulation_parameters["pulse_shape"],
+        pulse_shape,
         simulation_parameters["num_pulses"],
         distortion,
         simulation_parameters["noise_profile"])
 
 
-def save_simulation_result(
-        num_examples : int,
-        batch_size: int,
+def create_default_simulator(
+        experiment_name: str,
         distortion: bool,
-        simulator: QuantumTFSimulator,
-        simulation_name: str,
-        zip_file: str,
-        temp_location: str
-):
-    """Run the simulation and save the result
+        pulse_shape: str,
 
-    :param num_examples: Number of experiments to create
-    :param batch_size: Size of each batch
-    :param distortion: True if the simulator is for distorted pulse, False otherwise
-    :param simulator: Simulator object
-    :param simulation_name: A descriptive name of the simulation (used to create pickle file
-    with results
-    :param zip_file: The absolute path of the zip file to save the results
-    :param temp_location: The absolute path of the temporary location to save intermediate
-    results
-    """
-    for idx_batch in range(num_examples // batch_size):
-        print("Simulating and storing batch %d\n" % idx_batch)
-        start = time.time()
-        simulation_results = simulator.simulate(
-            np.zeros((batch_size, 1)),
-            batch_size=batch_size)
+) -> QuantumMLSimulator:
+    """Create a Quantum ML simulator from a known experiment name
 
-        elapsed_time = time.time() - start
-        pulse_parameters, pulses, distorted_pulses, noise = simulation_results[0:4]
-        hamitonian_0, \
-        hamiltonian_1, \
-        unitary_0, \
-        _, unitary_i, \
-        expectations = simulation_results[4:10]
-        vector_obs = simulation_results[10:]
+    :param experiment_name: A known experiment name; must be one of
+    ['1q_X', '1q_X_N1Z', '1q_X_N2Z', '1q_X_N3Z',
+     '1q_X_N4Z', '1q_XY', '1q_XY_N1X_N5Z', '1q_XY_N1X_N6Z',
+     '1q_XY_N3X_N6Z', '2q_IX_XI_XX', '2q_IX_XI_XX_N1N5IZ_N1N5ZI',
+     '2q_IX_XI_XX_N1N6IZ_N1N6ZI', '2q_IX_XI_N1N6IZ_N1N6ZI']
+     :param distortion: Indicating if distortion would be added or not
+     :param pulse_shape: Shape of the pulse; must one one of "Gaussian",
+     "Square" or "Zero"
 
-        for idx_ex in range(batch_size):
-            results = {"sim_parameters": simulator.get_simulation_parameters(),
-                       "elapsed_time": elapsed_time,
-                       "pulse_parameters": pulse_parameters[idx_ex:idx_ex + 1, :],
-                       "time_range": simulator.time_range,
-                       "pulses": pulses[idx_ex:idx_ex + 1, :],
-                       "distorted_pulses": (
-                           pulses[idx_ex:idx_ex + 1, :] if not distortion
-                           else distorted_pulses[idx_ex:idx_ex+1, :]),
-                       "expectations": np.average(expectations[idx_ex:idx_ex + 1, :], axis=1),
-                       "Vo_operator": [
-                           np.average(V[idx_ex:idx_ex + 1, :], axis=1) for V in vector_obs],
-                       "noise": noise[idx_ex:idx_ex + 1, :],
-                       "H0": hamitonian_0[idx_ex:idx_ex + 1, :],
-                       "H1": hamiltonian_1[idx_ex:idx_ex + 1, :],
-                       "U0": unitary_0[idx_ex:idx_ex + 1, :],
-                       "UI": unitary_i[idx_ex:idx_ex + 1, :],
-                       "Vo": [V[idx_ex:idx_ex + 1, :] for V in vector_obs],
-                       "Eo": expectations[idx_ex:idx_ex + 1, :]
-                       }
-            # open a pickle file
-            result_file_name = join(
-                temp_location, '{}_ex_{}'.format(
-                    simulation_name,
-                    idx_ex + idx_batch * batch_size))
-            with open(result_file_name, 'wb') as result_file:
-                # save the results
-                pickle.dump(results, result_file, -1)
-            # add the file to zip folder
-            zip_file.write(result_file_name)
-            # remove the pickle file
-            remove(result_file_name)
+     :returns: A QML simulator prepared out of chosen configuration
 
-
-def simulate(
-        simulation_parameters: Dict[str, Any],
-        simulation_name: str,
-        num_examples: int,
-        batch_size: int,
-        output_location: str
-):
-    """Main Api method to run and save simulation outcome
-
-    :param simulation_parameters: Parameters to create a simulator from
-    :param simulation_name: A descriptive name for the simulation
-    :param num_examples: Number of experiments to create
-    :param batch_size: Size of each batch
-    :param output_location: The absolute path of the folder where the resulting zip files
-    will be saved;for each call there will be 2 files creates - one without distortion and
-    the other with distortion of pulses
+     :raises ValueError: If the pulse_shape if one of the allowed shapes.
     """
 
-    simulator = create_simulator(simulation_parameters, False)
-    # 2) Run the simulator for pulses without distortions and collect/save the results
-    print("Running simulator for pulses without distortion")
-    pulse_shape = simulator.simulation_parameters["pulse_shape"]
-    zipfile_name = join(
-        output_location, '{}_{}.zip'.format(pulse_shape[0], simulation_name))
-    with zipfile.ZipFile(
-            zipfile_name,
-            mode='w',
-            compression=zipfile.ZIP_DEFLATED) as simulation_without_distortion:
-
-        save_simulation_result(
-            num_examples,
-            batch_size,
-            False,
-            simulator,
-            simulation_name,
-            simulation_without_distortion,
-            output_location
+    if pulse_shape not in ["Gaussian", "Square", "Zero"]:
+        raise ValueError(
+            "Pulse Shape is not known. Expected one of {}, found {}".format(
+                ["Gaussian", "Square", "Zero"], pulse_shape
+            )
         )
-    print("Pulses without distortion saved in {}".format(zipfile_name))
+    simulation_parameters = get_default_configuration(experiment_name)
 
-    print("Running the simulation for pulses with distortion")
-    simulator = create_simulator(simulation_parameters, True)
-    zipfile_name = join(
-        output_location, '{}_{}_distortion.zip'.format(pulse_shape[0], simulation_name))
-    with zipfile.ZipFile(
-            zipfile_name,
-            mode='w',
-            compression=zipfile.ZIP_DEFLATED) as simulation_with_distortion:
-        save_simulation_result(
-            num_examples,
-            batch_size,
-            True,
-            simulator,
-            simulation_name,
-            simulation_with_distortion,
-            output_location
+    return create_simulator(
+        simulation_parameters=simulation_parameters,
+        pulse_shape=pulse_shape,
+        distortion=distortion
+    )
+
+
+def create_custom_simulator(
+        evolution_time: float,
+        num_time_steps: int,
+        dimension: int,
+        dynamic_operators: List[array],
+        static_operators: List[array],
+        noise_operators: List[array],
+        measurement_operators: List[array],
+        initial_states: List[array],
+        num_realizations: int,
+        num_pulses: int,
+        noise_profile: List[str],
+        distortion: bool,
+        pulse_shape: str,
+
+) -> QuantumMLSimulator:
+
+    """
+    :param evolution_time : Evolution time
+    :param num_time_steps: Number of time steps
+    :param dimension: Dimension of the system
+    :param dynamic_operators: A list of arrays that represent the
+    terms of the control Hamiltonian (that depend on pulses)
+    :param static_operators: A list of arrays that represent
+    the terms of the drifting Hamiltonian (that are constant)
+    :param noise_operators: A list of arrays that represent
+    the terms of the classical noise Hamiltonians
+    :param measurement_operators: A list of arrays that represent
+    measurement operators
+    :param initial_states: A list of arrays representing initial states
+    :param num_realizations: Number of noise realizations; defaults to 1
+    :param num_pulses: Number of pulses per control sequence: defaults to 5
+    :param noise_profile : The type of noise, a value chosen from
+    ['Type 0','Type 1','Type 2','Type 4','Type 5','Type 6'];
+    defaults to ['Type 0']
+    :param distortion: Indicating if distortion would be added or not
+    :param pulse_shape: Shape of the pulse; must one one of "Gaussian",
+     "Square" or "Zero"
+
+    :returns: A QML simulator created out of chosen parameter
+
+    :raises ValueError: If the pulse_shape if one of the allowed shapes.
+    """
+
+    if pulse_shape not in ["Gaussian", "Square", "Zero"]:
+        raise ValueError(
+            "Pulse Shape is not known. Expected one of {}, found {}".format(
+                ["Gaussian", "Square", "Zero"], pulse_shape
+            )
         )
-    print("Pulses with distortion saved in {}".format(zipfile_name))
+    simulation_parameters = get_custom_config(
+        evolution_time=evolution_time,
+        num_time_steps=num_time_steps,
+        dimension=dimension,
+        dynamic_operators=dynamic_operators,
+        static_operators=static_operators,
+        noise_operators=noise_operators,
+        measurement_operators=measurement_operators,
+        initial_states=initial_states,
+        num_realizations=num_realizations,
+        num_pulses=num_pulses,
+        noise_profile=noise_profile
+    )
+
+    return create_simulator(
+        simulation_parameters=simulation_parameters,
+        pulse_shape=pulse_shape,
+        distortion=distortion
+    )

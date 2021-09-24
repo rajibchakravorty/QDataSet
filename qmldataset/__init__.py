@@ -5,10 +5,14 @@ Top-level package
 __version__ = "0.1.0"
 
 
-from .experiments.default_experiment import run_default_experiment
-from .experiments.custom_experiment import run_custom_experiment
+from .utilities.constants import pauli_operators
+
+from .utilities.simulate import create_default_simulator, create_custom_simulator
+from .utilities.create_experiment import run_experiment
 
 __all__ = [
-    'run_custom_experiment',
-    'run_default_experiment'
+    'create_custom_simulator',
+    'create_default_simulator',
+    'run_experiment',
+    'pauli_operators',
 ]

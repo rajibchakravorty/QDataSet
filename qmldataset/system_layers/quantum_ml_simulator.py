@@ -25,7 +25,7 @@ from .signal_generator_layer import SignalGenerator
 from .vo_layer import VoLayer
 
 
-class QuantumTFSimulator():
+class QuantumMLSimulator():
     """Main simulator class.
 
     :param evolution_time : Evolution time
@@ -211,8 +211,9 @@ class QuantumTFSimulator():
         """
         This method is for predicting the measurement outcomes using the trained model.
         Usually called after training.
-        :param simulator_inputs: A dummy numpy array of shape (number of experiments to simulate, 1)
-        :param batch_size:  The number of experiments to process at each batch, chosen according
+        :param simulator_inputs: A dummy numpy array of shape (number of
+        configurations to simulate, 1)
+        :param batch_size:  The number of configurations to process at each batch, chosen according
         to available memory; defaults to 1
 
         :returns: a list of arrays representing H0,H1,U0,U0(T),VO,expectations respectively

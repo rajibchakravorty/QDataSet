@@ -5,7 +5,7 @@ from typing import Dict, Any
 from numpy import average, eye, zeros
 from numpy.linalg import norm
 
-from ..system_layers.quantum_ml_simulator import QuantumTFSimulator
+from ..system_layers.quantum_ml_simulator import QuantumMLSimulator
 
 
 def check_noise(simulation_parameters: Dict[str, Any], dimension: int):
@@ -16,7 +16,7 @@ def check_noise(simulation_parameters: Dict[str, Any], dimension: int):
     :param simulation_parameters: Simulation Parameters
     :param dimension: Dimension of the system
     """
-    simulator = QuantumTFSimulator(
+    simulator = QuantumMLSimulator(
         simulation_parameters["evolution_time"],
         simulation_parameters["num_time_steps"],
         simulation_parameters["dynamic_operators"],
