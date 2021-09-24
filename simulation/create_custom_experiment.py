@@ -52,7 +52,7 @@ def create_experiment():
         pulse_shape=pulse_shape,
         num_pulses=num_pulses,
         noise_profile=noise_profile,
-        distortion=True
+        distortion=distortion
     )
 
     # run and gather of one experiment result
