@@ -45,7 +45,7 @@ class QuantumMLSimulator():
     :param num_pulses: Number of pulses per control sequence: defaults to 5Nice
     :param distortion: True for simulating distortions, False for no distortions;
     defaults to False
-    :param noise_profile : A list of noies types. Each type must be one of
+    :param noise_profile : A list of noise types. Each type must be one of
     ['Type 0','Type 1','Type 2','Type 4','Type 5','Type 6'];
     defaults to 'Type 0'
     """
