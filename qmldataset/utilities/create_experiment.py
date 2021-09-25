@@ -41,9 +41,9 @@ def run_experiment(
         "UI": unitary_i[0, :],
         "vo": [V[0, :] for V in vector_obs],
         "average_vo": [
-            average(V[0, :], axis=1) for V in vector_obs],
+            average(V[0, :], axis=0) for V in vector_obs],
         "expectations": expectations[0, :],
-        "average_expectation": [average(expectations[0, :], axis=1)]
+        "average_expectation": [average(expectations[0, :], axis=0)]
     }
 
     return result

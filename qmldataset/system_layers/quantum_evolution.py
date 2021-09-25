@@ -28,7 +28,7 @@ class QuantumEvolution(layers.RNN):
         """Custom call method of the layer
         """
 
-        # define identity matrix with correct dimensions to be used as initial propagtor
+        # define identity matrix with correct dimensions to be used as initial propagator
         dimensions = shape(inputs)
         identity = eye(
             dimensions[-1], batch_shape=[dimensions[0], dimensions[2]], dtype=complex64)

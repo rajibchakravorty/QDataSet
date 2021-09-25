@@ -3,7 +3,7 @@
 Configuration for experiment 1q_XY_N1X_N5Z - 1-qubit, Control on X and Y -Axes, Type 1 Noise
 on X Axis, Type 5 Noise on Z Axis
 """
-import numpy as np
+from numpy import array
 from ..utilities.constants import pauli_operators
 
 name = "1q_XY_N1X_N5Z"
@@ -18,9 +18,9 @@ static_operators = [0.5*pauli_operators[3]*omega]
 noise_operators = [0.5*pauli_operators[1],
                    0.5*pauli_operators[3]]
 initial_states = [
-    np.array([[0.5, 0.5], [0.5, 0.5]]), np.array([[0.5, -0.5], [-0.5, 0.5]]),
-    np.array([[0.5, -0.5j], [0.5j, 0.5]]), np.array([[0.5, 0.5j], [-0.5j, 0.5]]),
-    np.array([[1, 0], [0, 0]]), np.array([[0, 0], [0, 1]])
+    array([[0.5, 0.5], [0.5, 0.5]]), array([[0.5, -0.5], [-0.5, 0.5]]),
+    array([[0.5, -0.5j], [0.5j, 0.5]]), array([[0.5, 0.5j], [-0.5j, 0.5]]),
+    array([[1, 0], [0, 0]]), array([[0, 0], [0, 1]])
 ]
 measurement_operators = pauli_operators[1:]
 num_realizations = 2000
