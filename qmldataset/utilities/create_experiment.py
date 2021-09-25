@@ -43,7 +43,7 @@ def run_experiment(
         "average_vo": [
             average(V[0, :], axis=0) for V in vector_obs],
         "expectations": expectations[0, :],
-        "average_expectation": [average(expectations[0, :], axis=0)]
+        "average_expectation": average(expectations[0, :], axis=0)
     }
 
     return result
