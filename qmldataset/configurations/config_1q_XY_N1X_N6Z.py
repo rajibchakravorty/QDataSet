@@ -6,8 +6,6 @@ on X Axis, Type 6 Noise on Z Axis
 from numpy import array
 from ..utilities.constants import pauli_operators
 
-name = "1q_XY_N1X_N6Z"
-
 dimension = 2
 evolution_time = 1
 num_time_steps = 1024
@@ -23,6 +21,5 @@ initial_states = [
     array([[1, 0], [0, 0]]), array([[0, 0], [0, 1]])
 ]
 measurement_operators = pauli_operators[1:]
-num_realizations = 2000
 num_pulses = 5
 noise_profile = ['Type 1', 'Type 6']

@@ -283,5 +283,5 @@ if __name__ == "__main__":
 
     # characterize_open_quantum_system()
     # using_vo_operator()
-    # modelling_control_distortion()
-    learn_controller()
+    modelling_control_distortion()
+    # learn_controller()

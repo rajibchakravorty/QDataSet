@@ -15,12 +15,14 @@ from ..configurations.prepare_configs import get_default_configuration, get_cust
 def create_simulator(
         simulation_parameters: Dict[str, Any],
         pulse_shape: str,
+        num_realizations: int,
         distortion: bool
 ) -> QuantumMLSimulator:
     """Creates a simulator with specified parameters
 
     :param simulation_parameters: A dictionary with simulation parameters
     :param pulse_shape: Shape of the pulse; must be one of `Gaussian`, `Square` or `Zero`
+    :param num_realizations: Number of noise realizations
     :param distortion: True if distortion to be added, False otherwise
 
     :returns: The simulator created from given parameters
@@ -33,7 +35,7 @@ def create_simulator(
         simulation_parameters["noise_operators"],
         simulation_parameters["measurement_operators"],
         simulation_parameters["initial_states"],
-        simulation_parameters["num_realizations"],
+        num_realizations,
         pulse_shape,
         simulation_parameters["num_pulses"],
         distortion,
@@ -43,6 +45,7 @@ def create_simulator(
 def create_default_simulator(
         experiment_name: str,
         distortion: bool,
+        num_realizations: int,
         pulse_shape: str,
 
 ) -> QuantumMLSimulator:
@@ -56,7 +59,7 @@ def create_default_simulator(
      :param distortion: Indicating if distortion would be added or not
      :param pulse_shape: Shape of the pulse; must one one of "Gaussian",
      "Square" or "Zero"
-
+    :param num_realizations: Number of noise realizations
      :returns: A QML simulator prepared out of chosen configuration
 
      :raises ValueError: If the pulse_shape if one of the allowed shapes.
@@ -73,6 +76,7 @@ def create_default_simulator(
     return create_simulator(
         simulation_parameters=simulation_parameters,
         pulse_shape=pulse_shape,
+        num_realizations=num_realizations,
         distortion=distortion
     )
 
@@ -136,7 +140,6 @@ def create_custom_simulator(
         noise_operators=noise_operators,
         measurement_operators=measurement_operators,
         initial_states=initial_states,
-        num_realizations=num_realizations,
         num_pulses=num_pulses,
         noise_profile=noise_profile
     )
@@ -144,5 +147,6 @@ def create_custom_simulator(
     return create_simulator(
         simulation_parameters=simulation_parameters,
         pulse_shape=pulse_shape,
+        num_realizations=num_realizations,
         distortion=distortion
     )

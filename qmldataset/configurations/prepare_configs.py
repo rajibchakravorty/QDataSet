@@ -36,7 +36,6 @@ def get_default_configuration(
         configuration.noise_operators,
         configuration.measurement_operators,
         configuration.initial_states,
-        configuration.num_realizations,
         configuration.num_pulses,
         configuration.noise_profile
     )
@@ -51,7 +50,6 @@ def get_custom_config(
         noise_operators: List[array],
         measurement_operators: List[array],
         initial_states: List[array],
-        num_realizations: int,
         num_pulses: int,
         noise_profile: List[str]
 ) -> Dict[str, Any]:
@@ -69,7 +67,6 @@ def get_custom_config(
     :param measurement_operators: A list of arrays that represent
     measurement operators
     :param initial_states: A list of arrays representing initial states
-    :param num_realizations: Number of noise realizations; defaults to 1
     :param num_pulses: Number of pulses per control sequence: defaults to 5
     :param noise_profile : The type of noise, a value chosen from
     ['Type 0','Type 1','Type 2','Type 4','Type 5','Type 6'];
@@ -88,7 +85,6 @@ def get_custom_config(
         "noise_operators": noise_operators,
         "measurement_operators": measurement_operators,
         "initial_states": initial_states,
-        "num_realizations": num_realizations,
         "num_pulses": num_pulses,
         "noise_profile": noise_profile
     }

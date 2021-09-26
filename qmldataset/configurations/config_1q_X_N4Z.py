@@ -5,8 +5,6 @@ Configuration for experiment 1q_X_N4Z - 1-qubit, Control on X-Axis, Type 4 noise
 from numpy import array
 from ..utilities.constants import pauli_operators
 
-name = "1q_X_N4Z"
-
 dimension = 2
 evolution_time = 1
 num_time_steps = 1024
@@ -20,6 +18,5 @@ initial_states = [
     array([[0.5, -0.5j], [0.5j, 0.5]]), array([[0.5, 0.5j], [-0.5j, 0.5]]),
     array([[1, 0], [0, 0]]), array([[0, 0], [0, 1]])
 ]
-num_realizations = 2000
 num_pulses = 5
 noise_profile = ['Type 4']

@@ -61,16 +61,9 @@ def create_experiment():
         simulator=simulator
     )
 
-    print(experiment_result["expectations"].shape)
-    print(experiment_result["average_expectation"][0].shape)
-
-    print(len(experiment_result["vo"]))
-    print(experiment_result["vo"][0].shape)
-    print(len(experiment_result["average_vo"][0].shape))
-    print(experiment_result["average_vo"][0].shape)
-    # for param in experiment_result:
-    #     print("-- {} --".format(param))
-    #     print("-- {} --".format(experiment_result[param]))
+    for param in experiment_result:
+        print("-- {} --".format(param))
+        print("-- {} --".format(experiment_result[param]))
 
 
 if __name__ == '__main__':

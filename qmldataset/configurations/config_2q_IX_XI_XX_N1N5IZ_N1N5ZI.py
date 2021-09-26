@@ -6,9 +6,6 @@ from itertools import product
 from numpy import array, kron
 from ..utilities.constants import pauli_operators
 
-name = "2q_IX_XI_XX_N1N5IZ_N1N5ZI"
-
-
 dimension = 4
 evolution_time = 1
 num_time_steps = 1024
@@ -34,6 +31,5 @@ initial_states_1q = [
 initial_states = [
     kron(init_state_one, init_state_two) for init_state_one, init_state_two in list(
         product(initial_states_1q, initial_states_1q))]
-num_realizations = 2000
 num_pulses = 5
 noise_profile = ['Type 1', 'Type 5']
