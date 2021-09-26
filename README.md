@@ -36,10 +36,15 @@ def create_experiment():
     """
     experiment = '2q_IX_XI_XX_N1N5IZ_N1N5ZI'
 
+    pulse_shape = "Square"
+    distortion = True
+    num_realizations = 100
+
     simulator = create_default_simulator(
         experiment_name=experiment,
-        distortion=True,
-        pulse_shape="Square"
+        distortion=distortion,
+        num_realizations=num_realizations,
+        pulse_shape=pulse_shape
     )
 
     # run and gather of one experiment result
